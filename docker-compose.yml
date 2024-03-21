@@ -1,0 +1,106 @@
+version: "3.8"
+
+services:
+  ##############################
+  #          [Nginx]          ##
+  ##############################
+  nginx:
+    build:
+      context: ../Books/.docker/nginx
+      args:
+        USER: ${USER}
+        TZ: ${TZ}
+        WORKDIR_SERVER: /var/www/${NAMESPACE}
+        SERVER_NAME: ${SERVER_NAME}
+        SERVER_PATH: ${SERVER_PATH}
+    container_name: ${NAMESPACE}_nginx
+    working_dir: /var/www/${NAMESPACE}
+    depends_on:
+      # [PHP]
+      - php
+    ports:
+      - ${WEBSERVER_SECURE_PORT}:443
+      - ${WEBSERVER_UNSECURE_PORT}:80
+    volumes:
+      - ${PWD}:/var/www/${NAMESPACE}:delegated
+      # [PHP]
+      - php_socket:/var/run/php
+
+  ###############################
+  ##           [PHP]           ##
+  ###############################
+  php:
+    build:
+      context: ../Books/.docker/php
+      args:
+        USER: ${USER}
+        TZ: ${TZ}
+        PHP_VERSION_SET_IMAGE: php:${PHP_VERSION_SET}-fpm-alpine
+        PHP_VERSION_SET: ${PHP_VERSION_SET}
+        WORKDIR_SERVER: /var/www/${NAMESPACE}
+    container_name: ${NAMESPACE}_php
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    working_dir: /var/www/${NAMESPACE}
+    volumes:
+      #- ~/.composer:/var/www/.composer
+      - ${PWD}:/var/www/${NAMESPACE}:delegated
+      - php_socket:/var/run/php:cached
+      - mysql_socket:/var/run/mariadbd:cached
+      - ${PWD}/.docker/php/conf/extra/php-ini-overrides.ini:/usr/local/etc/php/conf.d/php-ini-overrides.ini
+
+  ###############################
+  ##         [MYSQL]     ##
+  ###############################
+  mysql:
+    build:
+      context: ../Books/.docker/SQL
+    container_name: ${NAMESPACE}_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_HOST: "%"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_socket:/var/run/mariadbd
+      - mysql_data:/var/lib/mysql/
+
+  ###############################
+  ##         [Adminer]         ##
+  ###############################
+  adminer:
+    container_name: ${NAMESPACE}_adminer
+    image: adminer:4.8.1
+    restart: always
+    environment:
+      ADMINER_DEFAULT_DB_HOST: mysql
+      ADMINER_DESIGN: flat
+      ADMINER_PLUGINS: tables-filter edit-foreign edit-calendar
+    ports:
+      - ${PGADMIN_EXTERNAL_PORT:-8080}:8080
+
+volumes:
+  ###############################
+  ##         [MYSQL]         ##
+  ###############################
+  mysql_data:
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/.docker/SQL/data
+
+  mysql_socket:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  ###############################
+  ##           [PHP]           ##
+  ###############################
+  php_socket:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
