@@ -41,7 +41,7 @@ class AuthorController extends AbstractController
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
-    #[Route('/api/authors', name: 'create', methods: ['POST'])]
+    #[Route('authors', name: 'create', methods: ['POST'])]
     public function createAuthor(
         Request $request,
         SerializerInterface $serializer,
@@ -62,7 +62,7 @@ class AuthorController extends AbstractController
         return new JsonResponse($jsonAuthor, Response::HTTP_CREATED, ["Location" => $location], true);
     }
 
-    #[Route('/api/authors/{id}', name: "updateAuthors", methods: ['PUT'])]
+    #[Route('authors/{id}', name: "updateAuthors", methods: ['PUT'])]
     public function updateAuthor(
         Request $request,
         SerializerInterface $serializer,
