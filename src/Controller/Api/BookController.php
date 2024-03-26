@@ -26,7 +26,6 @@ use OpenApi\Attributes as OA;
 #[Route('api/', name: 'books.')]
 class BookController extends AbstractController
 {
-
     #[OA\Response(
         response: 200,
         description: "Retourne la liste des livres",
@@ -38,12 +37,15 @@ class BookController extends AbstractController
     #[OA\Tag(name: 'Books')]
     #[Security(name: 'Bearer')]
     #[Route('books', name: 'all', methods: ['GET'])]
-    public function getBookList(BookRepository $bookRepository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
-    {
+    public function getBookList(
+        BookRepository $bookRepository,
+        SerializerInterface $serializer,
+        TagAwareCacheInterface $cache
+    ): JsonResponse {
         $idCache = "books";
         $jsonBookList = $cache->get($idCache, function (ItemInterface $item) use ($bookRepository, $serializer) {
             $item->tag("booksCache");
-            $bookList=  $bookRepository->findAll();
+            $bookList = $bookRepository->findAll();
             return $serializer->serialize($bookList, 'json', ['groups' => 'getBooks']);
         });
         return new JsonResponse($jsonBookList, Response::HTTP_OK, [], true);
@@ -55,6 +57,7 @@ class BookController extends AbstractController
         $jsonBook = $serializer->serialize($book, 'json', ['groups' => 'getBooks']);
         return new JsonResponse($jsonBook, Response::HTTP_OK, ['accept' => 'json'], true);
     }
+
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour créer un livre')]
     #[Route('books/{id}', name: 'delete', methods: ['DELETE'])]
     public function deleteBook(Book $book, BookManager $bookManager, TagAwareCacheInterface $cache): JsonResponse
@@ -86,9 +89,14 @@ class BookController extends AbstractController
         }
         $bookManager->handleBook(GenericConstant::PERSIST_AND_FLUSH, $book);
         $jsonBook = $serializer->serialize($book, 'json', ['groups' => 'getBooks']);
-        $location = $urlGenerator->generate('books.detail', ['id' => $book->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $location = $urlGenerator->generate(
+            'books.detail',
+            ['id' => $book->getId()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
         return new JsonResponse($jsonBook, Response::HTTP_CREATED, ["Location" => $location], true);
     }
+
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour créer un livre')]
     #[Route('books/{id}', name: 'update', methods: ['PUT'])]
     public function updateBook(

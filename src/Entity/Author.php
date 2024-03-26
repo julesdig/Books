@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 #[ApiResource()]
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
 class Author
@@ -29,6 +30,9 @@ class Author
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
 
+    /**
+     * @var Collection<int, Book>
+     */
     #[ORM\OneToMany(targetEntity: Book::class, mappedBy: 'author')]
     private Collection $books;
 

@@ -58,7 +58,11 @@ class AuthorController extends AbstractController
         $authorManager->handleAuthor(GenericConstant::PERSIST_AND_FLUSH, $author);
 
         $jsonAuthor = $serializer->serialize($author, 'json', ['groups' => 'getAuthors']);
-        $location = $urlGenerator->generate('authors.detail', ['id' => $author->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $location = $urlGenerator->generate(
+            'authors.detail',
+            ['id' => $author->getId()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
         return new JsonResponse($jsonAuthor, Response::HTTP_CREATED, ["Location" => $location], true);
     }
 

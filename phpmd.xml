@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<ruleset name="PHPMD Rules"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <rule ref="rulesets/cleancode.xml" >
+        <!-- make problem on new kernel.php -->
+        <exclude name="IfStatementAssignment" />
+        <exclude name="StaticAccess" />
+        <exclude name="BooleanArgumentFlag" />
+    </rule>
+    <rule ref="rulesets/codesize.xml" >
+        <!-- not very usefull for entity -->
+        <exclude name="TooManyFields" />
+        <exclude name="ExcessivePublicCount" />
+        <exclude name="ExcessiveClassComplexity" />
+        <exclude name="TooManyPublicMethods" />
+        <exclude name="CyclomaticComplexity" />
+        <exclude name="NPathComplexity" />
+        <exclude name="TooManyMethods"/>
+        <exclude name="ExcessiveClassLength"/>
+    </rule>
+
+    <rule ref="rulesets/controversial.xml" />
+    <rule ref="rulesets/design.xml" >
+        <exclude name="CouplingBetweenObjects" />
+    </rule>
+
+    <rule ref="rulesets/naming.xml">
+        <!-- not very usefull -->
+        <exclude name="LongVariable" />
+        <exclude name="ShortVariable" />
+        <exclude name="ShortMethodName" />
+        <exclude name="LongClassName" />
+    </rule>
+
+    <rule ref="rulesets/unusedcode.xml">
+        <!-- disabled because make error on php8 construct -->
+        <exclude name="UnusedFormalParameter" />
+    </rule>
+
+    <!-- Custom Rules beyond this point-->
+    <rule ref="rulesets/naming.xml/LongClassName">
+        <properties>
+            <property name="maximum" value="60" />
+        </properties>
+    </rule>
+
+    <rule ref="rulesets/codesize.xml/TooManyMethods">
+        <properties>
+            <property name="maxmethods" value="70" />
+        </properties>
+    </rule>
+
+    <rule ref="rulesets/codesize.xml/ExcessiveClassLength">
+        <properties>
+            <property name="minimum" value="1500" />
+        </properties>
+    </rule>
+</ruleset>

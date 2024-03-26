@@ -10,10 +10,8 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 
-
 class BookFixtures extends Fixture implements DependentFixtureInterface
 {
-
     private Generator $faker;
 
     public function __construct()
@@ -28,7 +26,7 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             $book->setTitle($this->faker->sentence());
             $book->setCoverText($this->faker->paragraph());
             $book->setComment($this->faker->text());
-            $book->setAuthor($this->getReference(AuthorConstant::AUTHORS_FIXTURES_REFERENCE.rand(0, 9)));
+            $book->setAuthor($this->getReference(AuthorConstant::AUTHORS_FIXTURES_REFERENCE . rand(0, 9)));
             $manager->persist($book);
         }
         $manager->flush();
@@ -40,5 +38,4 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             AuthorFixtures::class,
         ];
     }
-
 }

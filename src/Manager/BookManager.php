@@ -9,7 +9,6 @@ use InvalidArgumentException;
 
 readonly class BookManager
 {
-
     public function __construct(private EntityManagerInterface $manager)
     {
     }
@@ -22,7 +21,7 @@ readonly class BookManager
             GenericConstant::REMOVE => $this->manager->remove($book),
             GenericConstant::PERSIST_AND_FLUSH => $this->persistAndFlush($book),
             GenericConstant::REMOVE_AND_FLUSH => $this->removeAndFlush($book),
-            default => throw new InvalidArgumentException('Invalid operation: '.$operation),
+            default => throw new InvalidArgumentException('Invalid operation: ' . $operation),
         };
         return $book;
     }
@@ -40,5 +39,4 @@ readonly class BookManager
         $this->manager->flush();
         return $book;
     }
-
 }
