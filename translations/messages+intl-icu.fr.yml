@@ -1,0 +1,3 @@
+title.required: 'Le titre est requis'
+title.too_short: 'Le titre est trop court'
+title.too_long: 'Le titre est trop long'

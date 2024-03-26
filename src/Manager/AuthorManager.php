@@ -14,7 +14,7 @@ readonly class AuthorManager
     {
     }
 
-    public function handleAuthor(string $operation,Author $author): Author
+    public function handleAuthor(string $operation,?Author $author): ?Author
     {
         match ($operation) {
             GenericConstant::PERSIST => $this->manager->persist($author),
