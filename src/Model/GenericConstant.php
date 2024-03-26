@@ -10,5 +10,4 @@ class GenericConstant
     public const PERSIST_AND_FLUSH = 'persistAndFlush';
 
     public const REMOVE_AND_FLUSH = 'removeAndFlush';
-
 }

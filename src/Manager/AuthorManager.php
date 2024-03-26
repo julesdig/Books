@@ -9,12 +9,11 @@ use InvalidArgumentException;
 
 readonly class AuthorManager
 {
-
     public function __construct(private EntityManagerInterface $manager)
     {
     }
 
-    public function handleAuthor(string $operation,?Author $author): ?Author
+    public function handleAuthor(string $operation, ?Author $author): ?Author
     {
         match ($operation) {
             GenericConstant::PERSIST => $this->manager->persist($author),
@@ -22,7 +21,7 @@ readonly class AuthorManager
             GenericConstant::REMOVE => $this->manager->remove($author) ,
             GenericConstant::PERSIST_AND_FLUSH => $this->persistAndFlush($author),
             GenericConstant::REMOVE_AND_FLUSH => $this->removeAndFlush($author),
-            default => throw new InvalidArgumentException('Invalid operation: '.$operation),
+            default => throw new InvalidArgumentException('Invalid operation: ' . $operation),
         };
         return $author;
     }
@@ -38,5 +37,4 @@ readonly class AuthorManager
         $this->manager->flush();
         return $author;
     }
-
 }

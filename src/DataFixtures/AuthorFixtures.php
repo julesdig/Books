@@ -24,7 +24,7 @@ class AuthorFixtures extends Fixture
             $author->setFirstName($this->faker->firstName);
             $author->setLastName($this->faker->lastName);
             $manager->persist($author);
-            $this->addReference(AuthorConstant::AUTHORS_FIXTURES_REFERENCE.$i, $author);
+            $this->addReference(AuthorConstant::AUTHORS_FIXTURES_REFERENCE . $i, $author);
         }
         $manager->flush();
     }
