@@ -12,6 +12,10 @@
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
+.docker/SQL/data
+
+###> PHP storm ###
+/.idea/
 
 ###> squizlabs/php_codesniffer ###
 /.phpcs-cache
@@ -27,12 +31,3 @@ phpstan.neon
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
-###> symfony/phpunit-bridge ###
-.phpunit.result.cache
-/phpunit.xml
-###< symfony/phpunit-bridge ###
-
-.docker/SQL/data
-
-###> PHP storm ###
-/.idea/
