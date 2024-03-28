@@ -12,7 +12,8 @@
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
-.docker/SQL/data
+/.docker/SQL/data/
+!/.docker/SQL/data/.gitkeep
 
 ###> PHP storm ###
 /.idea/
